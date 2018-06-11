@@ -1,0 +1,39 @@
+@import '~antd/lib/style/themes/default.less';
+
+.tagSelect {
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  max-height: 56px;
+  line-height: 46px;
+  transition: all 0.3s;
+  padding: 0px 20px;
+  border-bottom: 1px solid #f6f6f6;
+  :global {
+    .ant-tag {
+      font-size: @font-size-base;
+      margin:0px !important;
+    }
+  }
+  &.expanded {
+    transition: all 0.3s;
+    max-height: 200px;
+  }
+  .trigger {
+    position: absolute;
+    top: 0;
+    right: 0;
+    i {
+      font-size: 12px;
+    }
+  }
+  &.hasExpandTag {
+    
+  }
+  h3 {
+    float:left;
+  }
+  .allTag {
+    float:right;
+  }
+}
