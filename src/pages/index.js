@@ -56,7 +56,7 @@ export default class  Index extends Component {
 
       return (
         <Row>
-          <Col span={18} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
+          <Col xl={17} lg={17} md={16} sm={16} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
               <TagSelect onChange={this.handleFormSubmit} expandable defaultValue="cat1">
                 <TagSelect.Option value="cat1">推荐</TagSelect.Option>
                 <TagSelect.Option value="cat2">前端</TagSelect.Option>
@@ -85,7 +85,7 @@ export default class  Index extends Component {
                 )}
               />
           </Col>
-          <Col span={6} style={{  padding:'10px 0px 10px 20px' }}>
+          <Col xl={7} lg={7} md={8} sm={9} style={{  padding:'10px 0px 10px 20px' }}>
               <div style={{ background:'#fff', padding:'20px' }}>
                  <div style={{ marginBottom:'10px'}}>
                     <h2 style={{ fontSize:'14px', fontWeight:'700', color:'#2e3135'}}>掘金 - juejin.im</h2>
