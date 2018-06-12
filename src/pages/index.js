@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { Row, Col, List, Avatar, Icon, Form, Input, Button, Card } from  'antd';
 import Link from 'umi/link';
+import { connect } from 'dva';
 import styles from './index.less';
 import TagSelect from '../components/TagSelect';
 
 const FormItem = Form.Item;
 
 const listData = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 1; i <= 10; i++) {
   listData.push({
-    href: 'http://ant.design',
+    href: `/topic/${i}`,
     title: `ant design part ${i}`,
     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
@@ -31,9 +32,19 @@ const IconText = ({ type, text }) => (
     {text}
   </span>
 );
-
+@connect(({ dispatch }) => ({
+  dispatch
+}))
 @Form.create()
-export default class  Index extends Component {
+export default class Index extends Component {
+
+  componentDidMount() {
+    //加载分类
+    this.props.dispatch({
+      type: 'topic/category/fetch',
+    });
+    
+  }
 
   handleFormSubmit = (value) => {
     //const { form, dispatch } = this.props;
@@ -53,7 +64,6 @@ export default class  Index extends Component {
 
     render() {
       const { getFieldDecorator } = this.props.form;
-
       return (
         <Row>
           <Col xl={17} lg={17} md={16} sm={16} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
@@ -71,7 +81,7 @@ export default class  Index extends Component {
                 dataSource={listData}
                 renderItem={item => (
                   <List.Item
-                    style={{ padding:'10px 25px'}}
+                    className={styles.topicList}
                     key={item.title}
                     actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
                     extra={<img width={148} height={98} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
@@ -123,6 +133,12 @@ export default class  Index extends Component {
                   dataSource={data}
                   renderItem={item => (<List.Item style={{ padding:'0px 15px', lineHeight:'45px', overflow:'hidden', height:'45px', alignItems:'baseline', borderBottom:'1px dashed #f6f6f6'}}>{item}</List.Item>)}
                 />
+              </Card>
+              <Card
+                bordered={false}
+                bodyStyle={{ padding:'0px'}}
+                cover={<img alt="example" src="http://p3.pstatp.com/list/300x170/834a0002e0b04a9f5c5b" />}
+              >
               </Card>
           </Col>
         </Row>
