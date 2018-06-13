@@ -1,22 +1,10 @@
 import React, { Component } from 'react';
-import { Row, Col, List, Avatar, Icon, Form, Input, Button, Card } from  'antd';
+import { Row, Col, List, Avatar, Icon, Card } from  'antd';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import styles from './index.less';
 import TagSelect from '../components/TagSelect';
-
-const FormItem = Form.Item;
-
-const listData = [];
-for (let i = 1; i <= 10; i++) {
-  listData.push({
-    href: `/topic/${i}`,
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+import Login from '../components/CardNote/Login';
 
 const data = [
   'Racing car sprays burning fuel into crowd.',
@@ -32,53 +20,56 @@ const IconText = ({ type, text }) => (
     {text}
   </span>
 );
-@connect(({ dispatch }) => ({
-  dispatch
+@connect(({ dispatch, category, topic }) => ({
+  dispatch,
+  category,
+  topic,
 }))
-@Form.create()
 export default class Index extends Component {
 
   componentDidMount() {
     //加载分类
     this.props.dispatch({
-      type: 'topic/category/fetch',
+      type: 'category/fetch',
+      payload:{
+        page:1
+      }
     });
-    
-  }
-
-  handleFormSubmit = (value) => {
-    //const { form, dispatch } = this.props;
-    // setTimeout 用于保证获取表单值是在所有表单字段更新完毕的时候
-    console.info(value);
-  };
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+    //加载话题
+    this.props.dispatch({
+      type: 'topic/fetch',
+      payload:{
+        //category:0
       }
     });
   }
 
-
+  handleFormSubmit = (value) => {
+   //加载话题
+   /* this.props.dispatch({
+      type: 'topic/fetch',
+      payload:{
+        category:value
+      }
+    });*/
+  };
     render() {
-      const { getFieldDecorator } = this.props.form;
+      const { list } = this.props.category;
+      console.info(this.props.topic);
       return (
         <Row>
           <Col xl={17} lg={17} md={16} sm={16} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
-              <TagSelect onChange={this.handleFormSubmit} expandable defaultValue="cat1">
-                <TagSelect.Option value="cat1">推荐</TagSelect.Option>
-                <TagSelect.Option value="cat2">前端</TagSelect.Option>
-                <TagSelect.Option value="cat3">后台</TagSelect.Option>
-                <TagSelect.Option value="cat4">区块链</TagSelect.Option>
-                <TagSelect.Option value="cat5">移动开发</TagSelect.Option>
-                <TagSelect.Option value="cat6">人工智能</TagSelect.Option>
-                <TagSelect.Option value="cat7">无人驾驶</TagSelect.Option>
+              <TagSelect onChange={this.handleFormSubmit} expandable defaultValue="0">
+                <TagSelect.Option value="0">推荐</TagSelect.Option>
+                {
+                  list.map(function(item){
+                    return <TagSelect.Option key={item.name} value={item.topicCategoryId}>{item.title}</TagSelect.Option>
+                  })
+                }
               </TagSelect>
               <List
                 itemLayout="vertical"
-                dataSource={listData}
+                dataSource={this.props.topic.list}
                 renderItem={item => (
                   <List.Item
                     className={styles.topicList}
@@ -88,7 +79,7 @@ export default class Index extends Component {
                   >
                     <List.Item.Meta
                       avatar={<Avatar src={item.avatar} />}
-                      title={<a href={item.href}>{item.title}</a>}
+                      title={ <Link to={`/topic/${item.topicId}`}>{item.title}</Link>}
                       description={item.description}
                     />
                   </List.Item>
@@ -96,37 +87,7 @@ export default class Index extends Component {
               />
           </Col>
           <Col xl={7} lg={7} md={8} sm={9} style={{  padding:'10px 0px 10px 20px' }}>
-              <div style={{ background:'#fff', padding:'20px' }}>
-                 <div style={{ marginBottom:'10px'}}>
-                    <h2 style={{ fontSize:'14px', fontWeight:'700', color:'#2e3135'}}>掘金 - juejin.im</h2>
-                    <p style={{ margin:'0px', lineHeight:'25px'}}>一个帮助开发者成长的社区</p>
-                    <p style={{ margin:'0px', lineHeight:'25px'}}>现在注册，送你45元买小册</p>
-                 </div>
-                  <Form onSubmit={this.handleSubmit} className={styles.login}>
-                    <FormItem>
-                      {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
-                      })(
-                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-                      )}
-                    </FormItem>
-                    <FormItem>
-                      {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
-                      })(
-                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-                      )}
-                    </FormItem>
-                    <FormItem>
-                      <Button type="primary" htmlType="submit" style={{ width:'100%'}}>注册</Button>
-                    </FormItem>
-                  </Form>
-                  <p style={{ margin:'0px'}}>第三方登录：
-                      <Icon type="qq" style={{ fontSize:'20px', padding:'0px 5px'}} />
-                      <Icon type="wechat" style={{ fontSize:'20px', padding:'0px 5px'}} />
-                      <Icon type="github" style={{ fontSize:'20px', padding:'0px 5px'}} />
-                  </p>
-              </div>
+              <Login />
                <Card className={styles.topicPayment} title="付费问答" extra={<Link to="/">查看全部</Link>} style={{ margin:'15px 0px' }} bodyStyle={{padding:'0px'}}>
                 <List
                   size="small"

@@ -19,9 +19,6 @@ export default class Header extends Component {
   		const { menuVisible } = this.state;
 	  	const { location } = this.props;
 	  	const { isMobile } = this.context;
-
-	  	console.info(isMobile);
-
 	  	const menu = (<Menu
   			  style={{ border:'none', fontSize:'16px', lineHeight:'56px' }}
 		      selectedKeys={[location.pathname]}
