@@ -20,10 +20,11 @@ const IconText = ({ type, text }) => (
     {text}
   </span>
 );
-@connect(({ dispatch, category, topic }) => ({
+@connect(({ dispatch, category, topic, loading }) => ({
   dispatch,
   category,
   topic,
+  loading
 }))
 export default class Index extends Component {
 
@@ -39,27 +40,26 @@ export default class Index extends Component {
     this.props.dispatch({
       type: 'topic/fetch',
       payload:{
-        //category:0
       }
     });
   }
 
   handleFormSubmit = (value) => {
    //加载话题
-   /* this.props.dispatch({
+   this.props.dispatch({
       type: 'topic/fetch',
       payload:{
         category:value
       }
-    });*/
+    });
   };
     render() {
       const { list } = this.props.category;
-      console.info(this.props.topic);
+      const { loading } = this.props;
       return (
-        <Row>
+        <Row style={{ width:'100%'}}>
           <Col xl={17} lg={17} md={16} sm={16} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
-              <TagSelect onChange={this.handleFormSubmit} expandable defaultValue="0">
+              <TagSelect loading={false} onChange={this.handleFormSubmit} expandable defaultValue="0">
                 <TagSelect.Option value="0">推荐</TagSelect.Option>
                 {
                   list.map(function(item){
@@ -71,18 +71,20 @@ export default class Index extends Component {
                 itemLayout="vertical"
                 dataSource={this.props.topic.list}
                 renderItem={item => (
-                  <List.Item
-                    className={styles.topicList}
-                    key={item.title}
-                    actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
-                    extra={<img width={148} height={98} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar} />}
-                      title={ <Link to={`/topic/${item.topicId}`}>{item.title}</Link>}
-                      description={item.description}
-                    />
-                  </List.Item>
+                  <Card bordered={false} loading={loading.models.topic}>
+                     <List.Item
+                      className={styles.topicList}
+                      key={item.title}
+                      actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
+                      extra={<img width={148} height={98} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+                    >
+                      <List.Item.Meta
+                        avatar={<Avatar src={item.avatar} />}
+                        title={ <Link to={`/topic/${item.topicId}`}>{item.title}</Link>}
+                        description={item.description}
+                      />
+                    </List.Item>
+                  </Card>
                 )}
               />
           </Col>

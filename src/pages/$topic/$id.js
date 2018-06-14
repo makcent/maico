@@ -13,22 +13,35 @@ const data = [
   'Los Angeles battles huge wildfires.',
 ];
 
-@connect(({ dispatch, category, topic }) => ({
+@connect(({ dispatch, category, topic, loading }) => ({
   dispatch,
   category,
   topic,
+  loading
 }))
 export default class Index extends Component {
 
+    componentDidMount() {
+      //加载话题
+      this.props.dispatch({
+        type: 'topic/show',
+        payload:{
+          id: this.props.match.params.id
+        }
+      });
+    }
+
+
     render() {
-      console.info(this.props.topic);
+      const { loading, topic } = this.props;
       return (
-        <Row>
+        <Row style={{ width:'100%'}}>
           <Col xl={17} lg={17} md={16} sm={16} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
-              
-              ssddevrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+            <Card bordered={false} loading={loading.models.topic} title={topic.detail.title} >
+              <div dangerouslySetInnerHTML={{__html: topic.detail.content}}></div>
+            </Card>
           </Col>
-          <Col xl={7} lg={7} md={8} sm={9} style={{  padding:'10px 0px 10px 20px' }}>
+          <Col xl={7} lg={7} md={8} sm={9} style={{  padding:'10px 0px 10px 20px'}}>
               <Login />
                <Card className={styles.topicPayment} title="付费问答" extra={<Link to="/">查看全部</Link>} style={{ margin:'15px 0px' }} bodyStyle={{padding:'0px'}}>
                 <List

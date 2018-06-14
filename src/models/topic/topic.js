@@ -32,11 +32,24 @@ export default {
         }
       });
     },
+    *show({ payload: { id } }, { call, put }) {
+        const { data } = yield call(topicService.show, id);
+        console.info(data, 22222222222);
+        yield put({
+           type:'detail',
+           payload: {
+             detail: data
+           }
+        });
+    }
   },
 
   reducers: {
     save(state, { payload: { list, total, limit } }) {
       return { ...state, list, total, limit };
     },
+    detail(state, { payload: { detail }}) {
+      return { ...state, detail };
+    }
   },
 };

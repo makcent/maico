@@ -2,12 +2,16 @@ import request from '../../utils/request';
 
 //获取话题列表或者详情
 export function fetch(params) {
-/*	if (typeof params.id != "undefined") {
-		return request(`/api/topic/${params.id}`);
-	}*/
 	return request(`/api/topic`, {
 		method: 'POST',
 		body:  JSON.stringify(params),
+	});
+}
+
+//获取话题详情
+export function show(id) {
+	return request(`/api/topic/${id}`, {
+		method:'GET',
 	});
 }
 
