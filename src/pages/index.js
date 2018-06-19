@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, List, Avatar, Icon, Card } from  'antd';
 import Link from 'umi/link';
+import {Helmet} from "react-helmet";
 import { connect } from 'dva';
 import styles from './index.less';
 import TagSelect from '../components/TagSelect';
@@ -58,6 +59,10 @@ export default class Index extends Component {
       const { loading } = this.props;
       return (
         <Row style={{ width:'100%'}}>
+        <Helmet>
+            <title>Nested Title</title>
+            <meta name="description" content="Nested component" />
+        </Helmet>
           <Col xl={17} lg={17} md={16} sm={16} style={{ background:'#fff', margin:'10px 0px', padding:'10px 0px'}}>
               <TagSelect loading={false} onChange={this.handleFormSubmit} expandable defaultValue="0">
                 <TagSelect.Option value="0">推荐</TagSelect.Option>

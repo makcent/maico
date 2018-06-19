@@ -35,6 +35,10 @@ class Layout extends Component{
       });
   }
 
+  setTitle(title){
+    console.info(222);
+  }
+
   render() {
   	const { location, children, ...restProps } = this.props;
   	return (
